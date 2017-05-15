@@ -96,6 +96,7 @@ console.log('conf =', conf)
 ```
 
 `node loadConf.ts`
+
 ```bash
 conf = {
   name: 'my-app',
@@ -108,6 +109,7 @@ conf = {
 ```
 
 `NODE_ENV=production node loadConf.ts`
+
 ```bash
 conf = {
   name: 'my-app',
