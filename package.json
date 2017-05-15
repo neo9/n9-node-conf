@@ -1,0 +1,36 @@
+{
+  "name": "n9-node-conf",
+  "version": "0.0.1",
+  "description": "Neo9 conf loader.",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/src"
+  ],
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "lint": "tslint src/*.ts",
+    "test": "npm run lint && npm run build && nyc --reporter=lcov ava --verbose --serial dist/test/",
+    "preversion": "npm test",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@scm.bytefactory.fr:2222/n9node/n9-node-conf.git"
+  },
+  "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
+  "dependencies": {
+    "app-root-dir": "^1.0.2",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.64",
+    "@types/node": "^7.0.18",
+    "ava": "^0.19.1",
+    "nyc": "^10.3.2",
+    "rimraf": "^2.6.1",
+    "std-mocks": "^1.0.1",
+    "tslint": "^5.2.0",
+    "typescript": "^2.3.2"
+  }
+}
