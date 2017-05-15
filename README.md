@@ -10,12 +10,12 @@ npm install --save n9-node-conf
 
 ## Usage
 
-`n9Conf([path] [, options])`
+`n9Conf([options])`
 
-Arguments:
+Options:
 
 - path: `String`, default: `process.env.CONF_PATH || './conf/'`
-- options: `Object`, default: `{}`
+- log: `Function`, method to log the output, useful to debug
 
 Example:
 
@@ -25,14 +25,13 @@ import n9Conf from 'n9-node-conf'
 const conf = n9Conf('../conf')
 ```
 
-Options:
-
-- log: `Function`, method to log the output, useful to debug
-
 Example:
 
 ```ts
-const conf = n9Conf('../conf', { log: console.log })
+const conf = n9Conf({
+  path: __dirname + '/../conf',
+  log: console.log
+})
 ```
 
 ## Structure

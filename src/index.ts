@@ -18,12 +18,13 @@ function customizer(objValue, srcValue) {
 export default function(options?: N9Options) {
 	// Options default
 	options = options || {}
-	const confPath: string = options.path || process.env.CONF_PATH || './conf/'
+	const rootDir = appRootDir.get()
+	const confPath: string = options.path || process.env.CONF_PATH || join(rootDir, 'conf')
 	const log = options.log || noop
 	// Environement
 	const env: string = process.env.NODE_ENV || 'development'
 	// Fetch package.json of the app
-	const app = require(join(appRootDir.get(), 'package.json'))
+	const app = require(join(rootDir, 'package.json'))
 	// Files to load
 	const files = [
 		'application',
