@@ -15,15 +15,7 @@ npm install --save n9-node-conf
 Options:
 
 - path: `String`, default: `process.env.CONF_PATH || './conf/'`
-- log: `Function`, method to log the output, useful to debug
-
-Example:
-
-```ts
-import n9Conf from 'n9-node-conf'
-
-const conf = n9Conf('../conf')
-```
+- log: `Function`, method to log the output, useful to debug, default: `() => {}`
 
 Example:
 
