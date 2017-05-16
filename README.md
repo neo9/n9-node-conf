@@ -19,6 +19,8 @@ Options:
 Example:
 
 ```ts
+import n9Conf from 'n9-node-conf'
+
 const conf = n9Conf({
   path: __dirname + '/../conf',
 })
