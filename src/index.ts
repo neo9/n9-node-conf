@@ -6,7 +6,7 @@ import * as appRootDir from 'app-root-dir'
 
 const log = debug('n9-node-conf')
 
-export interface N9Options {
+export interface N9ConfOptions {
 	path?: string
 }
 
@@ -17,7 +17,7 @@ function customizer(objValue, srcValue) {
 	if (isObject(objValue) || isObject(srcValue)) return mergeWith(objValue, srcValue, customizer)
 }
 
-export default function(options?: N9Options) {
+export default function(options?: N9ConfOptions) {
 	// Options default
 	options = options || {}
 	const rootDir = appRootDir.get()
