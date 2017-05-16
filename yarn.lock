@@ -37,6 +37,10 @@
     ansi-styles "^2.2.1"
     esutils "^2.0.2"
 
+"@types/debug@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-0.0.29.tgz#a1e514adfbd92f03a224ba54d693111dbf1f3754"
+
 "@types/lodash@^4.14.64":
   version "4.14.64"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.64.tgz#979cf3a3d4a368670840bf9b3e448dc33ffe84ee"
@@ -939,7 +943,7 @@ debug-log@^1.0.1:
   version "1.0.1"
   resolved "https://repository.neo9.pro/content/groups/global-npm/debug-log/-/debug-log-1.0.1.tgz#2307632d4c04382b8df8a32f70b895046d52745f"
 
-debug@^2.1.1, debug@^2.2.0, debug@^2.6.3:
+debug@^2.1.1, debug@^2.2.0, debug@^2.6.3, debug@^2.6.6:
   version "2.6.6"
   resolved "https://repository.neo9.pro/content/groups/global-npm/debug/-/debug-2.6.6.tgz#a9fa6fbe9ca43cf1e79f73b75c0189cbb7d6db5a"
   dependencies:

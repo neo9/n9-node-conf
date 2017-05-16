@@ -1,11 +1,13 @@
 import { existsSync } from 'fs'
 import { join } from 'path'
+import * as debug from 'debug'
 import { noop, isArray, isObject, isRegExp, mergeWith } from 'lodash'
 import * as appRootDir from 'app-root-dir'
 
+const log = debug('n9-node-conf')
+
 export interface N9Options {
-	path?: string,
-	log?: (...args: any[]) => void
+	path?: string
 }
 
 // Customizer method to merge sources
@@ -19,8 +21,7 @@ export default function(options?: N9Options) {
 	// Options default
 	options = options || {}
 	const rootDir = appRootDir.get()
-	const confPath: string = options.path || process.env.CONF_PATH || join(rootDir, 'conf')
-	const log = options.log || noop
+	const confPath: string = options.path || process.env.NODE_CONF_PATH || join(rootDir, 'conf')
 	// Environement
 	const env: string = process.env.NODE_ENV || 'development'
 	// Fetch package.json of the app

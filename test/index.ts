@@ -1,4 +1,5 @@
 import test from 'ava'
+import * as debug from 'debug'
 import * as stdMock from 'std-mocks'
 import { join } from 'path'
 
@@ -10,20 +11,6 @@ test('Simple use case', (t) => {
 	t.is(conf.env, 'development')
 	t.is(conf.name, app.name)
 	t.is(conf.version, app.version)
-	t.is(conf.test, true)
-})
-
-test('Should log the loaded file names', (t) => {
-	stdMock.use()
-	const conf = n9Conf({
-		path: join(__dirname, './fixtures/conf'),
-		log: console.log
-	})
-	stdMock.restore()
-	const output = stdMock.flush()
-	t.is(output.stdout.length, 2)
-	t.is(output.stdout[0], 'Loading application configuration\n')
-	t.is(output.stdout[1], 'Loading development configuration\n')
 	t.is(conf.test, true)
 })
 
@@ -43,14 +30,14 @@ test('Custom path with custom NODE_ENV', (t) => {
 	delete process.env.NODE_ENV
 })
 
-test('Simple work with process.env.CONF_PATH', (t) => {
-	process.env.CONF_PATH = join(__dirname, './fixtures/conf')
+test('Simple work with process.env.NODE_CONF_PATH', (t) => {
+	process.env.NODE_CONF_PATH = join(__dirname, './fixtures/conf')
 	const conf = n9Conf()
 	t.is(conf.env, 'development')
 	t.is(conf.name, app.name)
 	t.is(conf.version, app.version)
 	t.is(conf.test, true)
-	delete process.env.CONF_PATH
+	delete process.env.NODE_CONF_PATH
 })
 
 test('Should throw and error with bad path', (t) => {

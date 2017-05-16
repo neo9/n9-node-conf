@@ -21,9 +21,11 @@
   "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
   "dependencies": {
     "app-root-dir": "^1.0.2",
+    "debug": "^2.6.6",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@types/debug": "^0.0.29",
     "@types/lodash": "^4.14.64",
     "@types/node": "^7.0.18",
     "ava": "^0.19.1",
