@@ -1,7 +1,7 @@
 {
   "name": "n9-node-conf",
   "version": "1.0.2",
-  "description": "Neo9 conf loader.",
+  "description": "Neo9 Node Conf Module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [
