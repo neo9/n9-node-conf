@@ -27,7 +27,7 @@
   "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
   "dependencies": {
     "app-root-dir": "^1.0.2",
-    "debug": "^2.6.6",
+    "debug": "^2.6.7",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "@types/lodash": "^4.14.64",
     "@types/node": "^7.0.18",
     "ava": "^0.19.1",
-    "n9-node-sonar-generate": "^0.1.0",
+    "n9-node-sonar-generate": "^1.0.1",
     "nyc": "^10.3.2",
     "rimraf": "^2.6.1",
     "std-mocks": "^1.0.1",
