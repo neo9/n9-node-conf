@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rimraf dist/ && tsc",
     "lint": "tslint src/*.ts",
-    "test": "npm run lint && npm run build && nyc --reporter=lcov ava --verbose --serial dist/test/",
+    "test": "npm run lint && npm run build && nyc --reporter=lcov ava --verbose --serial dist/test/ && n9-sonar-generate",
     "preversion": "npm test",
     "prepublish": "npm run build"
   },
@@ -29,6 +29,7 @@
     "@types/lodash": "^4.14.64",
     "@types/node": "^7.0.18",
     "ava": "^0.19.1",
+    "n9-node-sonar-generate": "^0.1.0",
     "nyc": "^10.3.2",
     "rimraf": "^2.6.1",
     "std-mocks": "^1.0.1",
