@@ -21,7 +21,7 @@ export default function(options?: N9ConfOptions) {
 	// Options default
 	options = options || {}
 	const rootDir = appRootDir.get()
-	const confPath: string = options.path || process.env.NODE_CONF_PATH || join(rootDir, 'conf')
+	const confPath: string = process.env.NODE_CONF_PATH || options.path || join(rootDir, 'conf')
 	// Environement
 	const env: string = process.env.NODE_ENV || 'development'
 	// Fetch package.json of the app
