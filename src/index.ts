@@ -1,7 +1,7 @@
 import { existsSync } from 'fs'
 import { join } from 'path'
 import * as debug from 'debug'
-import { noop, isArray, isObject, isRegExp, mergeWith } from 'lodash'
+import { noop, isArray, isObject, isRegExp, mergeWith, isUndefined } from 'lodash'
 import * as appRootDir from 'app-root-dir'
 
 const log = debug('n9-node-conf')
@@ -12,6 +12,7 @@ export interface N9ConfOptions {
 
 // Customizer method to merge sources
 function customizer(objValue, srcValue) {
+	if (isUndefined(objValue) && !isUndefined(srcValue)) return srcValue
 	if (isArray(objValue) && isArray(srcValue)) return srcValue
 	if (isRegExp(objValue) || isRegExp(srcValue)) return srcValue
 	if (isObject(objValue) || isObject(srcValue)) return mergeWith(objValue, srcValue, customizer)

@@ -19,6 +19,7 @@ test('Custom path with custom NODE_ENV', (t) => {
 	process.env.NODE_ENV = 'test'
 	const conf = n9Conf({ path: join(__dirname, './fixtures/conf-2') })
 	t.is(conf.env, 'test')
+	t.deepEqual(conf.arr, ['a', 'b'])
 	t.deepEqual(conf.array, [1, 2, 3])
 	t.deepEqual(conf.object, {
 		key1: 'string',
