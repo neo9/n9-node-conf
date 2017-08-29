@@ -1,6 +1,6 @@
 # n9-node-conf
 
-Neo9 conf loader.
+Conf node module loader.
 
 ## Installation
 

@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@scm.bytefactory.fr:2222/n9node/n9-node-conf.git"
+    "url": "git+https://github.com/neo9/n9-node-conf"
   },
   "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
   "dependencies": {
