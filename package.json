@@ -1,5 +1,5 @@
 {
-  "name": "n9-node-conf",
+  "name": "@neo9/n9-node-conf",
   "version": "1.0.5",
   "description": "Neo9 Node Conf Module",
   "main": "dist/src/index.js",
