@@ -10,7 +10,7 @@ Conf node module loader.
 ## Installation
 
 ```bash
-npm install --save n9-node-conf
+npm install --save @neo9/n9-node-conf
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Options:
 Example:
 
 ```ts
-import n9Conf from 'n9-node-conf'
+import n9Conf from '@neo9/n9-node-conf'
 
 const conf = n9Conf({
   path: __dirname + '/../conf',
@@ -94,7 +94,7 @@ export default {
 `loadConf.ts`
 
 ```js
-import n9Conf from 'n9-node-conf'
+import n9Conf from '@neo9/n9-node-conf'
 
 const conf = n9Conf()
 console.log('conf =', conf)
