@@ -1,24 +1,24 @@
 {
   "name": "@neo9/n9-node-conf",
   "version": "1.0.6",
-  "description": "Neo9 Node Conf Module",
+  "description": "Conf node module loader",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [
     "dist/src"
   ],
+  "nyc": {
+    "include": [
+      "dist/src/"
+    ]
+  },
   "scripts": {
     "build": "rimraf dist/ && tsc",
     "lint": "tslint src/*.ts",
-    "test": "npm run lint && npm run build && nyc --reporter=lcov ava --verbose --serial dist/test/ && n9-sonar-generate",
+    "test": "npm run lint && npm run build && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "preversion": "npm test",
     "prepublish": "npm run build"
-  },
-  "sonar": {
-    "coverage.exclusions": "src/*.d.ts",
-    "ts.coverage.lcovReportPath": "./coverage/lcov.info",
-    "ts.tslint.path": "./node_modules/.bin/tslint",
-    "ts.tslint.configPath": "./tslint.json"
   },
   "repository": {
     "type": "git",
@@ -35,11 +35,18 @@
     "@types/lodash": "^4.14.74",
     "@types/node": "^8.0.25",
     "ava": "^0.22.0",
-    "@neo9/n9-node-sonar-generate": "^1.1.0",
+    "codecov": "^2.3.0",
     "nyc": "^11.1.0",
     "rimraf": "^2.6.1",
     "std-mocks": "^1.0.1",
     "tslint": "^5.7.0",
     "typescript": "^2.4.2"
-  }
+  },
+  "keywords": [
+    "node conf",
+    "conf env",
+    "conf",
+    "load conf",
+    "conf dir"
+  ]
 }

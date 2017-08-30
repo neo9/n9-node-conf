@@ -2,6 +2,11 @@
 
 Conf node module loader.
 
+[![npm version](https://img.shields.io/npm/v/@neo9/n9-node-conf.svg)](https://www.npmjs.com/package/@neo9/n9-node-conf)
+[![Travis](https://img.shields.io/travis/neo9/n9-node-conf/master.svg)](https://travis-ci.org/neo9/n9-node-conf)
+[![Coverage](https://img.shields.io/codecov/c/github/neo9/n9-node-conf/master.svg)](https://codecov.io/gh/neo9/n9-node-conf)
+[![license](https://img.shields.io/github/license/neo9/n9-node-conf.svg)](https://github.com/neo9/n9-node-conf/blob/master/LICENSE)
+
 ## Installation
 
 ```bash
