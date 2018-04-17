@@ -1,6 +1,6 @@
 {
   "name": "@neo9/n9-node-conf",
-  "version": "1.0.6",
+  "version": "1.1.1",
   "description": "Conf node module loader",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -27,20 +27,20 @@
   "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
   "dependencies": {
     "app-root-dir": "^1.0.2",
-    "debug": "^3.0.1",
-    "lodash": "^4.17.4"
+    "debug": "^3.1.0",
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
     "@types/debug": "^0.0.30",
-    "@types/lodash": "^4.14.74",
-    "@types/node": "^8.0.25",
+    "@types/lodash": "^4.14.107",
+    "@types/node": "^8.10.8",
     "ava": "^0.22.0",
-    "codecov": "^2.3.0",
-    "nyc": "^11.1.0",
-    "rimraf": "^2.6.1",
+    "codecov": "^2.3.1",
+    "nyc": "^11.7.0",
+    "rimraf": "^2.6.2",
     "std-mocks": "^1.0.1",
-    "tslint": "^5.7.0",
-    "typescript": "^2.4.2"
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
   },
   "keywords": [
     "node conf",
