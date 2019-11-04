@@ -1,8 +1,7 @@
-import { existsSync } from 'fs'
-import { join } from 'path'
-import * as debug from 'debug'
-import { noop, isArray, isObject, isRegExp, mergeWith, isUndefined } from 'lodash'
 import * as appRootDir from 'app-root-dir'
+import * as debug from 'debug'
+import { isArray, isObject, isRegExp, isUndefined, mergeWith } from 'lodash'
+import { join } from 'path'
 
 const log = debug('n9-node-conf')
 
@@ -18,7 +17,7 @@ function customizer(objValue, srcValue) {
 	if (isObject(objValue) || isObject(srcValue)) return mergeWith(objValue, srcValue, customizer)
 }
 
-export default function(options?: N9ConfOptions) {
+export default (options?: N9ConfOptions) => {
 	// Options default
 	options = options || {}
 	const rootDir = appRootDir.get()
@@ -31,21 +30,30 @@ export default function(options?: N9ConfOptions) {
 	const files = [
 		'application',
 		`${env}`,
-		'local'
+		'local',
 	]
 	// Sources of each config file
 	const sources = []
 	// Load each file
 	files.forEach((filename) => {
 		const filePath = join(confPath, filename)
-		let fileExists = true
-		try { require(filePath) } catch (err) { fileExists = false }
+		let fileLoadingError: Error
+		try {
+			require(filePath)
+		} catch (err) {
+			fileLoadingError = err
+			try {
+				log(`Error while loading config file '${filePath}' : ${JSON.stringify(err)}`)
+			} catch (e) {
+				log(`Can't stringify error ${err && err.message}`)
+			}
+		}
 		// If config file does not exists
-		if (!fileExists) {
+		if (fileLoadingError) {
 			// Ignore for local.js file
 			if (filename === 'local') return
 			// throw an error for others
-			throw new Error(`Could not load config file: ${filePath}`)
+			throw new Error(`Could not load config file: ${filePath}, ${fileLoadingError.name}(${fileLoadingError.message})`)
 		}
 		// Load its source
 		log(`Loading ${filename} configuration`)
@@ -56,8 +64,8 @@ export default function(options?: N9ConfOptions) {
 	sources.push({
 		env,
 		name: app.name,
-		version: app.version
+		version: app.version,
 	})
 	// Return merged sources
-	return mergeWith.apply(null, [ ...sources, customizer ])
+	return mergeWith.apply(null, [...sources, customizer])
 }
