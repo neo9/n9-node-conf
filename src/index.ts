@@ -7,7 +7,18 @@ const log = debug('n9-node-conf');
 
 export interface N9ConfOptions {
 	path?: string;
-	extendConfigPath?: string;
+	extendConfig?: {
+		path: {
+			absolute?: string;
+			/**
+			 * Relative path the `path`
+			 */
+			relative?: string;
+		};
+		key?: string;
+		mergeStrategy?: N9ConfMergeStrategy;
+	};
+	overridePackageJsonDirPath?: string;
 }
 
 // Customizer method to merge sources
@@ -20,23 +31,61 @@ function customizer(objValue: any, srcValue: any): any {
 	}
 }
 
-export interface BaseConf {
+export interface N9ConfBaseConf {
 	env: string;
 	name: string;
 	version: string;
 }
 
+export enum N9ConfMergeStrategy {
+	/**
+	 * Merge with lodash merge (_.merge)
+	 */
+	V1 = 'v1',
+	/**
+	 * Merge with n9Conf merge customizer
+	 */
+	V2 = 'v2',
+}
+
+function getExtendConfigPath(options: N9ConfOptions, confPath: string): string {
+	if (process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH) return process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH;
+	if (options.extendConfig?.path?.absolute) return options.extendConfig.path.absolute;
+	if (options.extendConfig?.path?.relative) {
+		return Path.join(confPath, options.extendConfig.path.relative);
+	}
+	return;
+}
+
 export default (options: N9ConfOptions = {}) => {
 	const rootDir = appRootDir.get();
 	const confPath: string = process.env.NODE_CONF_PATH || options.path || Path.join(rootDir, 'conf');
-	const environment: string = process.env.NODE_ENV || 'development';
-	const app = require(Path.join(rootDir, 'package.json')); // Fetch package.json of the app
-	const filenames = ['application', `${environment}`, 'local']; // Files to load
-	const sources: BaseConf[] = []; // Sources of each config file
+	const packageJsonDirPath = Path.join(
+		options.overridePackageJsonDirPath || rootDir,
+		'package.json',
+	);
+	const extendConfigPath: string = getExtendConfigPath(options, confPath);
+	const defaultMergeStrategy: N9ConfMergeStrategy = options.extendConfig?.mergeStrategy;
+	const currentEnvironment: string = process.env.NODE_ENV || 'development';
+	const app: { name: string; version: string } = require(packageJsonDirPath); // Fetch package.json of the app
+	const extendConfigKey: string = options.extendConfig?.key ?? app.name;
+	const environments = ['application', `${currentEnvironment}`, 'local']; // Files to load
+	const sources: N9ConfBaseConf[] = []; // Sources of each config file
+	let extendConfig: { metadata: { mergeStrategy: N9ConfMergeStrategy } };
+
+	if (extendConfigPath) {
+		try {
+			extendConfig = require(extendConfigPath);
+		} catch (e) {
+			throw new Error(
+				`Error while loading extendable config, ${extendConfigPath} ${JSON.stringify(e)}`,
+			);
+		}
+	}
 
 	// Load each file
-	for (const filename of filenames) {
-		const filePath = Path.join(confPath, filename);
+	for (const environment of environments) {
+		const filePath = Path.join(confPath, environment);
 		let fileLoadingError: Error;
 		try {
 			require(filePath);
@@ -51,7 +100,7 @@ export default (options: N9ConfOptions = {}) => {
 		// If config file does not exists
 		if (fileLoadingError) {
 			// Ignore for local.js file
-			if (filename === 'local') break;
+			if (environment === 'local') break;
 			// throw an error for others
 			throw new Error(
 				`Could not load config file: ${filePath}, ${fileLoadingError.name}(${
@@ -60,13 +109,37 @@ export default (options: N9ConfOptions = {}) => {
 			);
 		}
 		// Load its source
-		log(`Loading ${filename} configuration`);
-		const source = require(filePath);
-		sources.push(source.default || source);
+		log(`Loading ${environment} configuration`);
+		const loadedSource = require(filePath);
+		let source = loadedSource.default || loadedSource;
+
+		if (extendConfig) {
+			const strategy: N9ConfMergeStrategy =
+				extendConfig.metadata?.mergeStrategy ?? defaultMergeStrategy ?? N9ConfMergeStrategy.V2;
+			const extendConfigForThisEnv: object = extendConfig[environment]?.[extendConfigKey];
+			if (extendConfigForThisEnv) {
+				switch (strategy) {
+					case N9ConfMergeStrategy.V1:
+						source = _.merge(source, extendConfigForThisEnv);
+						break;
+					case N9ConfMergeStrategy.V2:
+						source = _.mergeWith(source, extendConfigForThisEnv, customizer);
+						break;
+					default:
+						throw new Error(
+							`Merge strategy unknown : ${strategy}, supported ones are : ${Object.values(
+								N9ConfMergeStrategy,
+							).join(' ')}`,
+						);
+				}
+			}
+		}
+
+		sources.push(source);
 	}
 	// Add env, name & version to the returned config
 	sources.push({
-		env: environment,
+		env: currentEnvironment,
 		name: app.name,
 		version: app.version,
 	});

@@ -38,6 +38,65 @@ const conf = n9NodeConf({
 });
 ```
 
+### Options :
+
+N9ConfOptions :
+
+#### path
+
+Type: `string`\
+Required \
+Path to the folder containing the configuration files. See the [structure](#structure) for more details.
+
+#### extendConfig
+
+Type: `object`\
+Default: undefined
+To describe extension configuration.
+
+##### path
+
+Type: `object`\
+Required \
+To describe where to find extension configuration. One of `absolute` or `relative` is required.
+
+###### absolute
+
+Type: `string`\
+Required if `relative` is not filled \
+Absolute path to the extension configuration.\
+Example : `Path.join(__dirname, 'conf/env.json')`
+
+###### relative
+
+Type: `string`\
+Required if `absolute` is not filled \
+Relative path to the conf folder `path` \
+Example : `'./env.json'`
+
+##### key
+
+Type: `string`\
+Default the app name from `package.json`.`name`\
+The key to use in configuration extension. The path to load the conf will be `{env}.{app name}`
+
+##### mergeStrategy
+
+Type: `N9ConfMergeStrategy` (`v1` or `v2`)\
+Default: `v2`\
+The merge strategy to use to merge extension configuration with the other.
+
+- v1 : Use lodash merge function. Mainly, merge deeper in arrays\
+  [a, b] + [c, d] → [merge(a, c), merge(b, d)]
+- v2 : Use built in mechanism. It replace array is any\
+  [a, b] + [c, d] → [c, d]
+
+#### overridePackageJsonDirPath
+
+Type: `string`\
+Default: `undefined`, use npm module [app-root-dir](https://www.npmjs.com/package/app-root-dir) to find `package.json`
+Used to load `package.json`, to find app name, app version and with app name to build the path to load the conf extension.
+
 ## Structure
 
 ```bash
@@ -59,6 +118,8 @@ The module will load these files, every file overwrites the one before:
 1. If `process.env.NODE_ENV` is not defined, default to `'development'`
 2. If `local.js` does not exists, it will be ignored.
 3. It will also fetch the `package.json` of the app to fill its `name` & `version`
+
+This module can use a configuration extension, see [here](./documentation/extendable-configuration.md) for more information.
 
 ## Example
 
