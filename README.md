@@ -21,7 +21,7 @@ npm install --save @neo9/n9-node-conf
 
 ## Usage
 
-`n9Conf([options])`
+`n9NodeConf([options])`
 
 Options:
 
@@ -29,11 +29,12 @@ Options:
 
 Example:
 
-```ts
-import n9Conf from '@neo9/n9-node-conf';
+```typescript
+import n9NodeConf from '@neo9/n9-node-conf';
+import { join } from 'path';
 
-const conf = n9Conf({
-	path: __dirname + '/../conf',
+const conf = n9NodeConf({
+	path: join(__dirname, 'conf'),
 });
 ```
 
@@ -99,9 +100,9 @@ export default {
 `loadConf.ts`
 
 ```js
-import n9Conf from '@neo9/n9-node-conf';
+import n9NodeConf from '@neo9/n9-node-conf';
 
-const conf = n9Conf();
+const conf = n9NodeConf();
 console.log('const conf =', conf);
 ```
 
