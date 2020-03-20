@@ -1,6 +1,6 @@
 {
   "name": "@neo9/n9-node-conf",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Conf node module loader",
   "keywords": [
     "node conf",
