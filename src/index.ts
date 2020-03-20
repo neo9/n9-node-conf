@@ -39,9 +39,9 @@ function customizer(objValue: any, srcValue: any): any {
 }
 
 export interface N9ConfBaseConf {
-	env: string;
-	name: string;
-	version: string;
+	env?: string;
+	name?: string;
+	version?: string;
 }
 
 export enum N9ConfMergeStrategy {
