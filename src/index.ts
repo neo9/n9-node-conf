@@ -19,6 +19,13 @@ export interface N9ConfOptions {
 		mergeStrategy?: N9ConfMergeStrategy;
 	};
 	overridePackageJsonDirPath?: string;
+	/**
+	 * Override the conf at the end of loading.
+	 */
+	override?: {
+		value: object;
+		mergeStrategy?: N9ConfMergeStrategy;
+	};
 }
 
 // Customizer method to merge sources
@@ -55,6 +62,25 @@ function getExtendConfigPath(options: N9ConfOptions, confPath: string): string {
 		return Path.join(confPath, options.extendConfig.path.relative);
 	}
 	return;
+}
+
+function mergeWithStrategy(
+	strategy: N9ConfMergeStrategy = N9ConfMergeStrategy.V2,
+	source: object,
+	override1: object,
+): object {
+	switch (strategy) {
+		case N9ConfMergeStrategy.V1:
+			return _.merge(source, override1);
+		case N9ConfMergeStrategy.V2:
+			return _.mergeWith(source, override1, customizer);
+		default:
+			throw new Error(
+				`Merge strategy unknown : ${strategy}, supported ones are : ${Object.values(
+					N9ConfMergeStrategy,
+				).join(' ')}`,
+			);
+	}
 }
 
 export default (options: N9ConfOptions = {}) => {
@@ -118,20 +144,7 @@ export default (options: N9ConfOptions = {}) => {
 				extendConfig.metadata?.mergeStrategy ?? defaultMergeStrategy ?? N9ConfMergeStrategy.V2;
 			const extendConfigForThisEnv: object = extendConfig[environment]?.[extendConfigKey];
 			if (extendConfigForThisEnv) {
-				switch (strategy) {
-					case N9ConfMergeStrategy.V1:
-						source = _.merge(source, extendConfigForThisEnv);
-						break;
-					case N9ConfMergeStrategy.V2:
-						source = _.mergeWith(source, extendConfigForThisEnv, customizer);
-						break;
-					default:
-						throw new Error(
-							`Merge strategy unknown : ${strategy}, supported ones are : ${Object.values(
-								N9ConfMergeStrategy,
-							).join(' ')}`,
-						);
-				}
+				source = mergeWithStrategy(strategy, source, extendConfigForThisEnv);
 			}
 		}
 
@@ -144,5 +157,9 @@ export default (options: N9ConfOptions = {}) => {
 		version: app.version,
 	});
 	// Return merged sources
-	return _.mergeWith.apply(null, [...sources, customizer]);
+	let result = _.mergeWith.apply(null, [...sources, customizer]);
+	if (options.override?.value) {
+		result = mergeWithStrategy(options.override.mergeStrategy, result, options.override.value);
+	}
+	return result;
 };

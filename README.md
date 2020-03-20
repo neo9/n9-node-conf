@@ -40,7 +40,7 @@ const conf = n9NodeConf({
 
 ### Options :
 
-N9ConfOptions :
+[N9ConfOptions](./src/index.ts#L8) :
 
 #### path
 
@@ -96,6 +96,24 @@ The merge strategy to use to merge extension configuration with the other.
 Type: `string`\
 Default: `undefined`, use npm module [app-root-dir](https://www.npmjs.com/package/app-root-dir) to find `package.json`
 Used to load `package.json`, to find app name, app version and with app name to build the path to load the conf extension.
+
+#### override
+
+Type: `object`\
+Default undefined, no override
+Override the conf at the end of loading.
+
+##### value
+
+Type: `object`\
+Default: undefined, not applied\
+Value to override the conf at the end of loading. Merge strategy used is defined bellow. Useful for tests.
+
+##### mergeStrategy
+
+Type: `N9ConfMergeStrategy`\
+Default : N9ConfMergeStrategy.V2\
+Merge strategy to use to merge override.
 
 ## Structure
 
