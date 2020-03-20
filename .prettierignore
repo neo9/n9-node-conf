@@ -1,3 +1,21 @@
+# not supported files
+.prettierignore
+.dockerignore
+.env
+.gitignore
+.mailmap
+Dockerfile
+Jenkinsfile
+.editorconfig
+
+# scripts
+*.sh
+
+# generated files
+CHANGELOG.md
+yarn.lock
+package.json
+
 # Logs
 logs
 *.log
@@ -20,10 +38,6 @@ dist
 .LSOverride
 ._*
 
-# Coverage
-coverage
-.nyc_output
-
 # Windows related files
 Thumbs.db
 ehthumbs.db
@@ -33,7 +47,11 @@ $RECYCLE.BIN/
 # Optional npm cache directory
 .npm
 
+# Coverage
+coverage
+.nyc_output
+coverage.lcov
+
 # Sonar
 .scannerwork
 sonar-project.properties
-coverage.lcov

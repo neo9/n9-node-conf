@@ -2,51 +2,84 @@
   "name": "@neo9/n9-node-conf",
   "version": "1.1.1",
   "description": "Conf node module loader",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
-  "files": [
-    "dist/src"
-  ],
-  "nyc": {
-    "include": [
-      "dist/src/"
-    ]
-  },
-  "scripts": {
-    "build": "rimraf dist/ && tsc",
-    "lint": "tslint src/*.ts",
-    "test": "npm run lint && npm run build && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "preversion": "npm test",
-    "prepublish": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/neo9/n9-node-conf"
-  },
-  "author": "Sebastien Chopin <sebastien.chopin@neo9.fr>",
-  "dependencies": {
-    "app-root-dir": "^1.0.2",
-    "debug": "^3.1.0",
-    "lodash": "^4.17.5"
-  },
-  "devDependencies": {
-    "@types/debug": "^0.0.30",
-    "@types/lodash": "^4.14.107",
-    "@types/node": "^8.10.8",
-    "ava": "^0.22.0",
-    "codecov": "^2.3.1",
-    "nyc": "^11.7.0",
-    "rimraf": "^2.6.2",
-    "std-mocks": "^1.0.1",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
-  },
   "keywords": [
     "node conf",
     "conf env",
     "conf",
     "load conf",
     "conf dir"
-  ]
+  ],
+  "author": "Benjamin DANIEL <benjamin.daniel@neo9.fr>",
+  "license": "GNU",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/src"
+  ],
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "lint": "tslint --project tsconfig.json --format verbose '{src,test}/**/*.ts'",
+    "lint:apply": "npm run format && tslint --fix --project tsconfig.json '{src,test}/**/*.ts'",
+    "format": "prettier --write '{,@(src|test)/**/}*.*'",
+    "test:dev": "export NODE_ENV=test && TS_NODE_FILES=true ava --verbose --color --serial --watch",
+    "test": "npm run lint && npm run build && export NODE_ENV=test && nyc ava --verbose --color --serial && nyc report --reporter=html",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "preversion": "npm test",
+    "prepublishOnly": "npm run build",
+    "release": "export BABEL_DISABLE_CACHE=1 && release-it",
+    "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --dry-run=true",
+    "build:changelog": "conventional-changelog -i CHANGELOG.md -s -p jscs -r 0",
+    "post:release": "echo Successfully released $npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neo9/n9-node-conf"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "dependencies": {
+    "app-root-dir": "^1.0.2",
+    "debug": "^4.1.1",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@ava/typescript": "^1.1.1",
+    "@commitlint/cli": "^8.3.5",
+    "@neo9/n9-coding-style": "^1.0.2",
+    "@types/debug": "^4.1.5",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.9.2",
+    "ava": "^3.5.0",
+    "codecov": "^3.6.5",
+    "conventional-changelog-cli": "^2.0.31",
+    "husky": "^4.2.3",
+    "nyc": "^15.0.0",
+    "prettier": "^1.19.1",
+    "release-it": "^13.1.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.7.0",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.2.0",
+    "typescript": "^3.8.3"
+  },
+  "ava": {
+    "files": [
+      "test/*"
+    ],
+    "timeout": "1m",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run format && npm run lint"
+    }
+  }
 }

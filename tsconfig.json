@@ -1,16 +1,17 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es2018",
     "outDir": "dist",
-    "lib": [
-      "es2015"
-    ],
-		"declaration": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "experimentalDecorators": true,
     "noImplicitAny": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "lib": ["es2015", "es2016", "es2017", "es2018"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "dist"]
 }

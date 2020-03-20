@@ -1,4 +1,4 @@
 module.exports = {
 	other: 'yes',
-	regexp: /test-2/
-}
+	regexp: /test-2/,
+};

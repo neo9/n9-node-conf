@@ -10,6 +10,12 @@ Conf node module loader.
 ## Installation
 
 ```bash
+yarn add @neo9/n9-node-conf
+```
+
+or
+
+```bash
 npm install --save @neo9/n9-node-conf
 ```
 
@@ -24,11 +30,11 @@ Options:
 Example:
 
 ```ts
-import n9Conf from '@neo9/n9-node-conf'
+import n9Conf from '@neo9/n9-node-conf';
 
 const conf = n9Conf({
-  path: __dirname + '/../conf',
-})
+	path: __dirname + '/../conf',
+});
 ```
 
 ## Structure
@@ -55,13 +61,12 @@ The module will load these files, every file overwrites the one before:
 
 ## Example
 
-
 `package.json`
 
 ```json
 {
-  "name": "my-app",
-  "version": "0.1.2"
+	"name": "my-app",
+	"version": "0.1.2"
 }
 ```
 
@@ -69,61 +74,61 @@ The module will load these files, every file overwrites the one before:
 
 ```js
 export default {
-  http: {
-    port: 6686
-  }
-}
+	http: {
+		port: 6686,
+	},
+};
 ```
 
 `conf/development.ts`
 
 ```js
-export default {}
+export default {};
 ```
 
 `conf/production.ts`
 
 ```js
 export default {
-  http: {
-    port: 80
-  }
-}
+	http: {
+		port: 80,
+	},
+};
 ```
 
 `loadConf.ts`
 
 ```js
-import n9Conf from '@neo9/n9-node-conf'
+import n9Conf from '@neo9/n9-node-conf';
 
-const conf = n9Conf()
-console.log('conf =', conf)
+const conf = n9Conf();
+console.log('const conf =', conf);
 ```
 
 `node loadConf.ts`
 
-```bash
-conf = {
-  name: 'my-app',
-  version: '0.1.2',
-  env: 'development',
-  http: {
-    port: 5000
-  }
-}
+```typescript
+const conf = {
+	name: 'my-app',
+	version: '0.1.2',
+	env: 'development',
+	http: {
+		port: 5000,
+	},
+};
 ```
 
 `NODE_ENV=production node loadConf.ts`
 
-```bash
-conf = {
-  name: 'my-app',
-  version: '0.1.2',
-  env: 'production',
-  http: {
-    port: 80
-  }
-}
+```typescript
+const conf = {
+	name: 'my-app',
+	version: '0.1.2',
+	env: 'production',
+	http: {
+		port: 80,
+	},
+};
 ```
 
 ## Logs
