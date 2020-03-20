@@ -27,8 +27,7 @@
     "preversion": "npm test",
     "prepublishOnly": "npm run build",
     "release": "export BABEL_DISABLE_CACHE=1 && release-it --ci",
-    "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --dry-run=true",
-    "build:changelog": "conventional-changelog -i CHANGELOG.md -s -p jscs -r 0",
+    "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --ci --dry-run=true",
     "post:release": "echo Successfully released $npm_package_version"
   },
   "repository": {
@@ -47,6 +46,7 @@
     "@ava/typescript": "^1.1.1",
     "@commitlint/cli": "^8.3.5",
     "@neo9/n9-coding-style": "^1.0.2",
+    "@release-it/conventional-changelog": "^1.1.0",
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.9.2",

@@ -30,6 +30,12 @@
   "dist": {
     "repo": false
   },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "eslint",
+      "infile": "CHANGELOG.md"
+    }
+  },
   "prompt": {
     "src": {
       "status": true,
