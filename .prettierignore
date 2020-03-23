@@ -8,6 +8,9 @@ Dockerfile
 Jenkinsfile
 .editorconfig
 
+#test file
+test/fixtures/extend-conf-invalid/env.json
+
 # scripts
 *.sh
 

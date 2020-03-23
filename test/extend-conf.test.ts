@@ -24,29 +24,43 @@ ava('Simple use case with extendable conf', (t: ExecutionContext) => {
 	);
 });
 
-ava('Extendable conf error', (t: ExecutionContext) => {
+ava('Extendable conf does nto exists is ignored', (t: ExecutionContext) => {
 	delete process.env.NODE_ENV;
 	process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH = join(__dirname, './fixtures/wrong-path/env.json');
+	t.notThrows(() => {
+		src({
+			path: join(__dirname, './fixtures/extend-conf-1'),
+			extendConfig: {
+				path: {},
+			},
+			overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-1'),
+		});
+	}, 'should not throw error due to wrong path, file is ignored');
+	delete process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH;
+});
+
+ava('Extendable conf error due to invalid json', (t: ExecutionContext) => {
 	const error = t.throws(
 		() => {
 			src({
 				path: join(__dirname, './fixtures/extend-conf-1'),
 				extendConfig: {
-					path: {},
+					path: {
+						absolute: join(__dirname, './fixtures/extend-conf-invalid/env.json'),
+					},
 				},
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-1'),
 			});
 		},
 		null,
-		'should throw error due to wrong path',
+		'should not throw error due to wrong conf file',
 	);
 
 	t.true(
 		error.message.includes('Error while loading extendable config'),
 		'Error is due to extendable config wrong path',
 	);
-	t.true(error.message.includes('wrong-path'), 'Error include wrong path for debug');
-	delete process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH;
+	t.true(error.message.includes('extend-conf-invalid'), 'Error include wrong path for debug');
 });
 
 ava('Extendable conf error unknown mergeStrategy', (t: ExecutionContext) => {

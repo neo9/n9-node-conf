@@ -1,5 +1,6 @@
 import * as appRootDir from 'app-root-dir';
 import * as debug from 'debug';
+import * as fs from 'fs-extra';
 import * as _ from 'lodash';
 import * as Path from 'path';
 
@@ -101,7 +102,9 @@ export default (options: N9ConfOptions = {}) => {
 
 	if (extendConfigPath) {
 		try {
-			extendConfig = require(extendConfigPath);
+			if (fs.pathExistsSync(extendConfigPath)) {
+				extendConfig = fs.readJSONSync(extendConfigPath);
+			}
 		} catch (e) {
 			throw new Error(
 				`Error while loading extendable config, ${extendConfigPath} ${JSON.stringify(e)}`,

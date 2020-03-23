@@ -40,6 +40,7 @@
   "dependencies": {
     "app-root-dir": "^1.0.2",
     "debug": "^4.1.1",
+    "fs-extra": "^9.0.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -48,6 +49,7 @@
     "@neo9/n9-coding-style": "^1.0.2",
     "@release-it/conventional-changelog": "^1.1.0",
     "@types/debug": "^4.1.5",
+    "@types/fs-extra": "^8.1.0",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.9.2",
     "ava": "^3.5.0",
