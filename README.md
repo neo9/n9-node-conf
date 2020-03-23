@@ -52,7 +52,14 @@ Path to the folder containing the configuration files. See the [structure](#stru
 
 Type: `object`\
 Default: undefined
-To describe extension configuration.
+To describe extension configuration. Extension configuration ca be a `json`, `yaml` or `yml` file. \
+In the order, it will try to load the path given, then the same file changing the extension to another supported.
+
+| given | 2nd try | 3rd try |
+| :---: | :-----: | :-----: |
+| json  |  yaml   |   yml   |
+| yaml  |   yml   |  json   |
+|  yml  |  json   |  yaml   |
 
 ##### path
 
