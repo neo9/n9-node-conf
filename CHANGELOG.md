@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/neo9/n9-node-conf/compare/v1.2.3...v1.3.0) (2020-03-23)
+
+
+### yaml
+
+* Add documentation for YAML extension ([106d4d4](https://github.com/neo9/n9-node-conf/commit/106d4d401ca360438b25224de0efcfe92ac61f78))
+* Add support of YAML files ([f4d34e1](https://github.com/neo9/n9-node-conf/commit/f4d34e1da19b5e2fc84b7529ef50566e0037a693))
+
 ## [1.2.3](https://github.com/neo9/n9-node-conf/compare/v1.2.2...v1.2.3) (2020-03-23)
 
 
