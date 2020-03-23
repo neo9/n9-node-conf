@@ -10,6 +10,7 @@ Jenkinsfile
 
 #test file
 test/fixtures/extend-conf-invalid/env.json
+test/fixtures/extend-conf-yaml-invalid/env.yaml
 
 # scripts
 *.sh

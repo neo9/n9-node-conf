@@ -24,7 +24,7 @@ ava('Simple use case with extendable conf', (t: ExecutionContext) => {
 	);
 });
 
-ava('Extendable conf does nto exists is ignored', (t: ExecutionContext) => {
+ava('Extendable conf does not exists is ignored', (t: ExecutionContext) => {
 	delete process.env.NODE_ENV;
 	process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH = join(__dirname, './fixtures/wrong-path/env.json');
 	t.notThrows(() => {
@@ -58,7 +58,7 @@ ava('Extendable conf error due to invalid json', (t: ExecutionContext) => {
 
 	t.true(
 		error.message.includes('Error while loading extendable config'),
-		'Error is due to extendable config wrong path',
+		'Error is due to extendable config wrong json file format',
 	);
 	t.true(error.message.includes('extend-conf-invalid'), 'Error include wrong path for debug');
 });
@@ -83,7 +83,7 @@ ava('Extendable conf error unknown mergeStrategy', (t: ExecutionContext) => {
 
 	t.true(
 		error.message.includes('Merge strategy unknown : v42'),
-		'Error is due to extendable config wrong path',
+		'Error is due to extendable config wrong strategy',
 	);
 });
 
@@ -108,7 +108,7 @@ ava('Extendable conf error unknown mergeStrategy forced', (t: ExecutionContext) 
 
 	t.true(
 		error.message.includes('Merge strategy unknown : v42'),
-		'Error is due to extendable config wrong path',
+		'Error is due to extendable config wrong strategy',
 	);
 });
 

@@ -1,9 +1,9 @@
 import * as appRootDir from 'app-root-dir';
 import * as debug from 'debug';
 import * as fs from 'fs-extra';
+import * as JsYaml from 'js-yaml';
 import * as _ from 'lodash';
 import * as Path from 'path';
-
 const log = debug('n9-node-conf');
 
 export interface N9ConfOptions {
@@ -84,6 +84,57 @@ function mergeWithStrategy(
 	}
 }
 
+function readConfigFile(path: string, type: 'json' | 'yaml'): any {
+	switch (type) {
+		case 'json':
+			return fs.readJSONSync(path);
+		case 'yaml':
+			return JsYaml.safeLoad(fs.readFileSync(path, 'utf8'));
+	}
+}
+
+function loadExtendConfig(
+	extendConfigPath: string,
+	extension: string = Path.extname(extendConfigPath),
+	deep: number = 3,
+): { metadata: { mergeStrategy: N9ConfMergeStrategy } } {
+	let type: 'json' | 'yaml';
+	switch (extension) {
+		case '.json':
+			type = 'json';
+			break;
+		case '.yaml':
+		case '.yml':
+			type = 'yaml';
+			break;
+		default:
+			throw new Error(
+				`Invalid extension configuration extension "${extension}" for file name ${extendConfigPath}`,
+			);
+	}
+	const fileNameWithoutExtension = Path.basename(extendConfigPath, Path.extname(extendConfigPath));
+	const dir = Path.dirname(extendConfigPath);
+	const path = Path.join(dir, `${fileNameWithoutExtension}${extension}`);
+	if (fs.pathExistsSync(path)) {
+		return readConfigFile(path, type);
+	}
+	if (deep > 0) {
+		// try if other types exists
+		if (extension === '.json') {
+			// load yaml
+			const yamlVersion = loadExtendConfig(extendConfigPath, '.yaml', deep - 1);
+		}
+		if (extension === '.yaml') {
+			// load yml
+			return loadExtendConfig(extendConfigPath, '.yml', deep - 1);
+		}
+		if (extension === '.yml') {
+			// load yml
+			return loadExtendConfig(extendConfigPath, '.json', deep - 1);
+		}
+	}
+}
+
 export default (options: N9ConfOptions = {}) => {
 	const rootDir = appRootDir.get();
 	const confPath: string = process.env.NODE_CONF_PATH || options.path || Path.join(rootDir, 'conf');
@@ -102,12 +153,12 @@ export default (options: N9ConfOptions = {}) => {
 
 	if (extendConfigPath) {
 		try {
-			if (fs.pathExistsSync(extendConfigPath)) {
-				extendConfig = fs.readJSONSync(extendConfigPath);
-			}
+			extendConfig = loadExtendConfig(extendConfigPath);
 		} catch (e) {
 			throw new Error(
-				`Error while loading extendable config, ${extendConfigPath} ${JSON.stringify(e)}`,
+				`Error while loading extendable config (${
+					e.message
+				}) : ${extendConfigPath} ${JSON.stringify(e)}`,
 			);
 		}
 	}
