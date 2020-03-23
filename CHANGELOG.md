@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/neo9/n9-node-conf/compare/v1.2.2...v1.2.3) (2020-03-23)
+
+
+### extension
+
+* Allow extended conf to not exists ([6e1a6a5](https://github.com/neo9/n9-node-conf/commit/6e1a6a53b61f180dc1bb6622c5268f9f50acb47e))
+
 ## [1.2.2](https://github.com/neo9/n9-node-conf/compare/v1.2.1...v1.2.2) (2020-03-20)
 
 
