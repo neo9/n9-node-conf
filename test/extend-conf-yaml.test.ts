@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import src from '../src';
 
-ava('Simple use case with extendable conf', (t: ExecutionContext) => {
+ava('Simple use case with extendable conf in yaml', (t: ExecutionContext) => {
 	delete process.env.NODE_ENV;
 	const conf: { textValue: string; array: string[] } = src({
 		path: join(__dirname, './fixtures/extend-conf-yaml-1'),

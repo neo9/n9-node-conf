@@ -48,3 +48,13 @@ ava('Should throw and error with bad path', (t) => {
 	});
 	t.true(error.message.includes('Could not load config file'));
 });
+
+ava('Invalid local config file', (t) => {
+	delete process.env.NODE_ENV;
+	const conf = src({ path: join(__dirname, './fixtures/conf-invalid-local') });
+	t.is(conf.env, 'development');
+	t.is(conf.name, app.name);
+	t.is(conf.version, app.version);
+	t.is(conf.test, true);
+	t.is(conf.other, undefined);
+});

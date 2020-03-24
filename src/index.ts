@@ -85,6 +85,7 @@ function mergeWithStrategy(
 }
 
 function readConfigFile(path: string, type: 'json' | 'yaml'): any {
+	log(`Load extension ${path}`);
 	switch (type) {
 		case 'json':
 			return fs.readJSONSync(path);
@@ -172,7 +173,9 @@ export default (options: N9ConfOptions = {}) => {
 		} catch (err) {
 			fileLoadingError = err;
 			try {
-				log(`Error while loading config file '${filePath}' : ${JSON.stringify(err)}`);
+				if (!(environment === 'local' && err.code === 'MODULE_NOT_FOUND')) {
+					log(`Error while loading config file '${filePath}' : ${JSON.stringify(err)}`);
+				}
 			} catch (e) {
 				log(`Can't stringify error ${err && err.message}`);
 			}
