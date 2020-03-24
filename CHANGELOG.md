@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/neo9/n9-node-conf/compare/v1.3.1...v1.3.2) (2020-03-24)
+
+
+### yaml
+
+* Fix yaml loading ([16d311b](https://github.com/neo9/n9-node-conf/commit/16d311bd224c8a2a25924b69f7162f30a4f58f06))
+
 ## [1.3.1](https://github.com/neo9/n9-node-conf/compare/v1.3.0...v1.3.1) (2020-03-24)
 
 
