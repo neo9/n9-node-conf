@@ -123,7 +123,7 @@ function loadExtendConfig(
 		// try if other types exists
 		if (extension === '.json') {
 			// load yaml
-			const yamlVersion = loadExtendConfig(extendConfigPath, '.yaml', deep - 1);
+			return loadExtendConfig(extendConfigPath, '.yaml', deep - 1);
 		}
 		if (extension === '.yaml') {
 			// load yml
