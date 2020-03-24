@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/neo9/n9-node-conf/compare/v1.3.0...v1.3.1) (2020-03-24)
+
+
+### logs
+
+* Add logs to tell which extension conf is loaded if any ([37defb5](https://github.com/neo9/n9-node-conf/commit/37defb513cf45ae207719af0bde288203ed5a67a))
+
 # [1.3.0](https://github.com/neo9/n9-node-conf/compare/v1.2.3...v1.3.0) (2020-03-23)
 
 
