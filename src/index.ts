@@ -190,6 +190,8 @@ export default (options: N9ConfOptions = {}) => {
 						fileLoadingError.message
 					}) details: ${JSON.stringify(fileLoadingError)}`,
 				);
+			} else {
+				log(`Missing configuration file ${environment}`);
 			}
 		}
 		// Load its source
