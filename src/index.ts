@@ -90,7 +90,7 @@ function readConfigFile(path: string, type: 'json' | 'yaml'): any {
 		case 'json':
 			return fs.readJSONSync(path);
 		case 'yaml':
-			return JsYaml.safeLoad(fs.readFileSync(path, 'utf8'));
+			return JsYaml.load(fs.readFileSync(path, 'utf8'));
 	}
 }
 
