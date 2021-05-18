@@ -1,3 +1,14 @@
+# [1.4.0](https://github.com/neo9/n9-node-conf/compare/v1.3.2...1.4.0) (2021-05-18)
+
+
+### release
+
+* Fix tag name ([4b730c1](https://github.com/neo9/n9-node-conf/commit/4b730c11df1e5f29f03a99a1df3290e489074da0))
+
+### yarn
+
+* Update all dependencies and drop node 10 support ([7d9e81a](https://github.com/neo9/n9-node-conf/commit/7d9e81ac70228990718759b098b0bf6a5952d840))
+
 ## [1.3.2](https://github.com/neo9/n9-node-conf/compare/v1.3.1...v1.3.2) (2020-03-24)
 
 
