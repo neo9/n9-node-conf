@@ -49,3 +49,34 @@ ava('Array override with merge strategy V1', (t) => {
 	// Remove NODE_ENV
 	delete process.env.NODE_ENV;
 });
+
+for (const mergeStrategy of Object.values(N9ConfMergeStrategy) as N9ConfMergeStrategy[]) {
+	ava(
+		`Check that original conf is not changed with mergeStrategy ${mergeStrategy}`,
+		(t: ExecutionContext) => {
+			delete process.env.NODE_ENV;
+			let conf = src({
+				path: join(__dirname, './fixtures/conf'),
+			});
+			t.is(conf.deep.test, true);
+
+			conf = src({
+				path: join(__dirname, './fixtures/conf'),
+				override: {
+					mergeStrategy,
+					value: {
+						deep: {
+							test: false,
+						},
+					},
+				},
+			});
+			t.is(conf.deep.test, false);
+
+			conf = src({
+				path: join(__dirname, './fixtures/conf'),
+			});
+			t.is(conf.deep.test, true, 'original value is still loaded well without override');
+		},
+	);
+}

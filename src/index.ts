@@ -72,9 +72,9 @@ function mergeWithStrategy(
 ): object {
 	switch (strategy) {
 		case N9ConfMergeStrategy.V1:
-			return _.merge(source, override1);
+			return _.merge(_.cloneDeep(source), override1);
 		case N9ConfMergeStrategy.V2:
-			return _.mergeWith(source, override1, customizer);
+			return _.mergeWith(_.cloneDeep(source), override1, customizer);
 		default:
 			throw new Error(
 				`Merge strategy unknown : ${strategy}, supported ones are : ${Object.values(

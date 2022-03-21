@@ -1,3 +1,5 @@
-export default {
+const conf = {
 	test: true,
 };
+
+export default conf;
