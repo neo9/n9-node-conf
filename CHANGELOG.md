@@ -1,3 +1,14 @@
+## [1.4.1](https://github.com/neo9/n9-node-conf/compare/1.4.0...1.4.1) (2022-03-21)
+
+
+### build
+
+* Use github-actions for build instead of travis ([9bff0d3](https://github.com/neo9/n9-node-conf/commit/9bff0d3ec374e6d59dd516b6c78bf6af336c6aa4))
+
+### override
+
+* Fix conf edited when loaded twice after override ([861022d](https://github.com/neo9/n9-node-conf/commit/861022d5803ea60333b5277c0957822af3b6d44f))
+
 # [1.4.0](https://github.com/neo9/n9-node-conf/compare/v1.3.2...1.4.0) (2021-05-18)
 
 
