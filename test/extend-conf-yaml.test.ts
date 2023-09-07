@@ -101,7 +101,7 @@ ava("Can't load unknown file type", (t: ExecutionContext) => {
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-yaml-1'),
 			});
 		},
-		null,
+		undefined,
 		'should not throw error due to wrong conf file',
 	);
 
@@ -139,7 +139,7 @@ ava('Extendable conf error due to invalid yaml', (t: ExecutionContext) => {
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-yaml-1'),
 			});
 		},
-		null,
+		undefined,
 		'should not throw error due to wrong conf file',
 	);
 
