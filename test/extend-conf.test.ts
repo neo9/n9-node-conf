@@ -52,7 +52,7 @@ ava('Extendable conf error due to invalid json', (t: ExecutionContext) => {
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-1'),
 			});
 		},
-		null,
+		undefined,
 		'should not throw error due to wrong conf file',
 	);
 
@@ -77,7 +77,7 @@ ava('Extendable conf error unknown mergeStrategy', (t: ExecutionContext) => {
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-3'),
 			});
 		},
-		null,
+		undefined,
 		'should throw error due to wrong merge strategy',
 	);
 
@@ -102,7 +102,7 @@ ava('Extendable conf error unknown mergeStrategy forced', (t: ExecutionContext) 
 				overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-3'),
 			});
 		},
-		null,
+		undefined,
 		'should throw error due to wrong merge strategy',
 	);
 

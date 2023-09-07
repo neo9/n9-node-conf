@@ -4,7 +4,19 @@ import * as fs from 'fs-extra';
 import * as JsYaml from 'js-yaml';
 import * as _ from 'lodash';
 import * as Path from 'path';
+
 const log = debug('n9-node-conf');
+
+export enum N9ConfMergeStrategy {
+	/**
+	 * Merge with lodash merge (_.merge)
+	 */
+	V1 = 'v1',
+	/**
+	 * Merge with n9Conf merge customizer
+	 */
+	V2 = 'v2',
+}
 
 export interface N9ConfOptions {
 	path?: string;
@@ -29,6 +41,12 @@ export interface N9ConfOptions {
 	};
 }
 
+export interface N9ConfBaseConf {
+	env?: string;
+	name?: string;
+	version?: string;
+}
+
 // Customizer method to merge sources
 function customizer(objValue: any, srcValue: any): any {
 	if (_.isUndefined(objValue) && !_.isUndefined(srcValue)) return srcValue;
@@ -37,23 +55,6 @@ function customizer(objValue: any, srcValue: any): any {
 	if (_.isObject(objValue) || _.isObject(srcValue)) {
 		return _.mergeWith(objValue, srcValue, customizer);
 	}
-}
-
-export interface N9ConfBaseConf {
-	env?: string;
-	name?: string;
-	version?: string;
-}
-
-export enum N9ConfMergeStrategy {
-	/**
-	 * Merge with lodash merge (_.merge)
-	 */
-	V1 = 'v1',
-	/**
-	 * Merge with n9Conf merge customizer
-	 */
-	V2 = 'v2',
 }
 
 function getExtendConfigPath(options: N9ConfOptions, confPath: string): string {
@@ -66,9 +67,9 @@ function getExtendConfigPath(options: N9ConfOptions, confPath: string): string {
 }
 
 function mergeWithStrategy(
-	strategy: N9ConfMergeStrategy = N9ConfMergeStrategy.V2,
 	source: object,
 	override1: object,
+	strategy: N9ConfMergeStrategy = N9ConfMergeStrategy.V2,
 ): object {
 	switch (strategy) {
 		case N9ConfMergeStrategy.V1:
@@ -86,11 +87,14 @@ function mergeWithStrategy(
 
 function readConfigFile(path: string, type: 'json' | 'yaml'): any {
 	log(`Load extension ${path}`);
+
 	switch (type) {
 		case 'json':
 			return fs.readJSONSync(path);
 		case 'yaml':
 			return JsYaml.load(fs.readFileSync(path, 'utf8'));
+		default:
+			throw new Error(`Invalid type "${type}", can't read file ${path}`);
 	}
 }
 
@@ -100,6 +104,7 @@ function loadExtendConfig(
 	deep: number = 3,
 ): { metadata: { mergeStrategy: N9ConfMergeStrategy } } {
 	let type: 'json' | 'yaml';
+
 	switch (extension) {
 		case '.json':
 			type = 'json';
@@ -113,12 +118,15 @@ function loadExtendConfig(
 				`Invalid extension configuration extension "${extension}" for file name ${extendConfigPath}`,
 			);
 	}
+
 	const fileNameWithoutExtension = Path.basename(extendConfigPath, Path.extname(extendConfigPath));
 	const dir = Path.dirname(extendConfigPath);
 	const path = Path.join(dir, `${fileNameWithoutExtension}${extension}`);
+
 	if (fs.pathExistsSync(path)) {
 		return readConfigFile(path, type);
 	}
+
 	if (deep > 0) {
 		// try if other types exists
 		if (extension === '.json') {
@@ -136,7 +144,7 @@ function loadExtendConfig(
 	}
 }
 
-export default (options: N9ConfOptions = {}) => {
+export default (options: N9ConfOptions = {}): object | any => {
 	const rootDir = appRootDir.get();
 	const confPath: string = process.env.NODE_CONF_PATH || options.path || Path.join(rootDir, 'conf');
 	const packageJsonDirPath = Path.join(
@@ -144,9 +152,14 @@ export default (options: N9ConfOptions = {}) => {
 		'package.json',
 	);
 	const extendConfigPath: string = getExtendConfigPath(options, confPath);
+
 	const defaultMergeStrategy: N9ConfMergeStrategy = options.extendConfig?.mergeStrategy;
 	const currentEnvironment: string = process.env.NODE_ENV || 'development';
-	const app: { name: string; version: string } = require(packageJsonDirPath); // Fetch package.json of the app
+
+	// Fetch package.json of the app
+	/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
+	const app: { name: string; version: string } = require(packageJsonDirPath);
+
 	const extendConfigKey: string = options.extendConfig?.key ?? app.name;
 	const environments = ['application', `${currentEnvironment}`, 'local']; // Files to load
 	const sources: N9ConfBaseConf[] = []; // Sources of each config file
@@ -155,23 +168,26 @@ export default (options: N9ConfOptions = {}) => {
 	if (extendConfigPath) {
 		try {
 			extendConfig = loadExtendConfig(extendConfigPath);
-		} catch (e) {
+		} catch (err) {
 			throw new Error(
 				`Error while loading extendable config (${
-					e.message
-				}) : ${extendConfigPath} ${JSON.stringify(e)}`,
+					err.message
+				}) : ${extendConfigPath} ${JSON.stringify(err)}`,
 			);
 		}
 	}
 
 	// Load each file
 	for (const environment of environments) {
-		const filePath = Path.join(confPath, environment);
+		const filePath: string = Path.join(confPath, environment);
 		let fileLoadingError: Error;
+
 		try {
+			/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 			require(filePath);
 		} catch (err) {
 			fileLoadingError = err;
+
 			try {
 				if (!(environment === 'local' && err.code === 'MODULE_NOT_FOUND')) {
 					log(`Error while loading config file '${filePath}' : ${JSON.stringify(err)}`);
@@ -180,6 +196,7 @@ export default (options: N9ConfOptions = {}) => {
 				log(`Can't stringify error ${err && err.message}`);
 			}
 		}
+
 		// If config file does not exists
 		if (fileLoadingError) {
 			// Ignore for local.js file
@@ -191,32 +208,42 @@ export default (options: N9ConfOptions = {}) => {
 				}) details: ${JSON.stringify(fileLoadingError)}`,
 			);
 		}
+
 		// Load its source
 		log(`Loading ${environment} configuration`);
+
+		/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 		const loadedSource = require(filePath);
+
 		let source = loadedSource.default || loadedSource;
 
 		if (extendConfig) {
 			const strategy: N9ConfMergeStrategy =
 				extendConfig.metadata?.mergeStrategy ?? defaultMergeStrategy ?? N9ConfMergeStrategy.V2;
+
 			const extendConfigForThisEnv: object = extendConfig[environment]?.[extendConfigKey];
+
 			if (extendConfigForThisEnv) {
-				source = mergeWithStrategy(strategy, source, extendConfigForThisEnv);
+				source = mergeWithStrategy(source, extendConfigForThisEnv, strategy);
 			}
 		}
 
 		sources.push(source);
 	}
+
 	// Add env, name & version to the returned config
 	sources.push({
 		env: currentEnvironment,
 		name: app.name,
 		version: app.version,
 	});
+
 	// Return merged sources
 	let result = _.mergeWith.apply(null, [...sources, customizer]);
+
 	if (options.override?.value) {
-		result = mergeWithStrategy(options.override.mergeStrategy, result, options.override.value);
+		result = mergeWithStrategy(result, options.override.value, options.override.mergeStrategy);
 	}
+
 	return result;
 };

@@ -3,7 +3,8 @@ import ava from 'ava';
 import { join } from 'path';
 
 import src from '../src';
-// tslint:disable-next-line:no-var-requires
+
+/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 const app = require(join(appRootDir.get(), 'package.json'));
 
 ava('Simple use case', (t) => {
@@ -46,6 +47,7 @@ ava('Should throw and error with bad path', (t) => {
 	const error = t.throws(() => {
 		src();
 	});
+
 	t.true(error.message.includes('Could not load config file'));
 });
 
