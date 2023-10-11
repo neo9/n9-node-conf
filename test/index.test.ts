@@ -1,5 +1,5 @@
 import * as appRootDir from 'app-root-dir';
-import ava from 'ava';
+import test from 'ava';
 import { join } from 'path';
 
 import src from '../src';
@@ -7,7 +7,7 @@ import src from '../src';
 /* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 const app = require(join(appRootDir.get(), 'package.json'));
 
-ava('Simple use case', (t) => {
+test('Simple use case', (t) => {
 	delete process.env.NODE_ENV;
 	const conf = src({ path: join(__dirname, './fixtures/conf') });
 	t.is(conf.env, 'development');
@@ -16,7 +16,7 @@ ava('Simple use case', (t) => {
 	t.is(conf.test, true);
 });
 
-ava('Custom path with custom NODE_ENV', (t) => {
+test('Custom path with custom NODE_ENV', (t) => {
 	// Set NODE_ENV to 'test'
 	process.env.NODE_ENV = 'test';
 	const conf = src({ path: join(__dirname, './fixtures/conf-2') });
@@ -33,7 +33,7 @@ ava('Custom path with custom NODE_ENV', (t) => {
 	delete process.env.NODE_ENV;
 });
 
-ava('Simple work with process.env.NODE_CONF_PATH', (t) => {
+test('Simple work with process.env.NODE_CONF_PATH', (t) => {
 	process.env.NODE_CONF_PATH = join(__dirname, './fixtures/conf');
 	const conf = src();
 	t.is(conf.env, 'development');
@@ -43,7 +43,7 @@ ava('Simple work with process.env.NODE_CONF_PATH', (t) => {
 	delete process.env.NODE_CONF_PATH;
 });
 
-ava('Should throw and error with bad path', (t) => {
+test('Should throw and error with bad path', (t) => {
 	const error = t.throws(() => {
 		src();
 	});
@@ -51,7 +51,7 @@ ava('Should throw and error with bad path', (t) => {
 	t.true(error.message.includes('Could not load config file'));
 });
 
-ava('Invalid local config file', (t) => {
+test('Invalid local config file', (t) => {
 	delete process.env.NODE_ENV;
 	const conf = src({ path: join(__dirname, './fixtures/conf-invalid-local') });
 	t.is(conf.env, 'development');

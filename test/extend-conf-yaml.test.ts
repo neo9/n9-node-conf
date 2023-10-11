@@ -1,17 +1,20 @@
-import ava, { ExecutionContext } from 'ava';
+import test, { ExecutionContext } from 'ava';
 import { join } from 'path';
 
 import src from '../src';
 
-ava('Simple use case with extendable conf in yaml', (t: ExecutionContext) => {
+test.beforeEach(() => {
 	delete process.env.NODE_ENV;
+});
+
+test('Simple use case with extendable conf in yaml', (t: ExecutionContext) => {
 	const conf: { textValue: string; array: string[] } = src({
 		path: join(__dirname, './fixtures/extend-conf-yaml-1'),
 		extendConfig: {
 			path: {
 				absolute: join(__dirname, './fixtures/extend-conf-yaml-1/env.yaml'),
 			},
-			key: 'appName',
+			key: { name: 'appName' },
 		},
 		overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-yaml-1'),
 	});
@@ -24,15 +27,14 @@ ava('Simple use case with extendable conf in yaml', (t: ExecutionContext) => {
 	);
 });
 
-ava('Can call extending file env.yaml', (t: ExecutionContext) => {
-	delete process.env.NODE_ENV;
+test('Can call extending file env.yaml', (t: ExecutionContext) => {
 	const conf: { textValue: string; array: string[] } = src({
 		path: join(__dirname, './fixtures/extend-conf-yaml-1'),
 		extendConfig: {
 			path: {
 				absolute: join(__dirname, './fixtures/extend-conf-yaml-1/env.json'),
 			},
-			key: 'appName',
+			key: { name: 'appName' },
 		},
 		overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-yaml-1'),
 	});
@@ -45,15 +47,14 @@ ava('Can call extending file env.yaml', (t: ExecutionContext) => {
 	);
 });
 
-ava('Can call extending file env.yml', (t: ExecutionContext) => {
-	delete process.env.NODE_ENV;
+test('Can call extending file env.yml', (t: ExecutionContext) => {
 	const conf: { textValue: string; array: string[] } = src({
 		path: join(__dirname, './fixtures/extend-conf-yaml-1'),
 		extendConfig: {
 			path: {
 				absolute: join(__dirname, './fixtures/extend-conf-yml-1/env.json'),
 			},
-			key: 'appName',
+			key: { name: 'appName' },
 		},
 		overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-yaml-1'),
 	});
@@ -66,15 +67,14 @@ ava('Can call extending file env.yml', (t: ExecutionContext) => {
 	);
 });
 
-ava('Can call extending file env.json', (t: ExecutionContext) => {
-	delete process.env.NODE_ENV;
+test('Can call extending file env.json', (t: ExecutionContext) => {
 	const conf: { textValue: string; array: string[] } = src({
 		path: join(__dirname, './fixtures/extend-conf-1'),
 		extendConfig: {
 			path: {
 				absolute: join(__dirname, './fixtures/extend-conf-1/env.yaml'),
 			},
-			key: 'appName',
+			key: { name: 'appName' },
 		},
 		overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-1'),
 	});
@@ -87,8 +87,7 @@ ava('Can call extending file env.json', (t: ExecutionContext) => {
 	);
 });
 
-ava("Can't load unknown file type", (t: ExecutionContext) => {
-	delete process.env.NODE_ENV;
+test("Can't load unknown file type", (t: ExecutionContext) => {
 	const error = t.throws(
 		() => {
 			src({
@@ -111,8 +110,7 @@ ava("Can't load unknown file type", (t: ExecutionContext) => {
 	);
 });
 
-ava('Extendable conf does not exists is ignored', (t: ExecutionContext) => {
-	delete process.env.NODE_ENV;
+test('Extendable conf does not exists is ignored', (t: ExecutionContext) => {
 	process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH = join(__dirname, './fixtures/wrong-path/env.yaml');
 	t.notThrows(() => {
 		src({
@@ -126,7 +124,7 @@ ava('Extendable conf does not exists is ignored', (t: ExecutionContext) => {
 	delete process.env.NODE_CONF_EXTEND_ABSOLUTE_PATH;
 });
 
-ava('Extendable conf error due to invalid yaml', (t: ExecutionContext) => {
+test('Extendable conf error due to invalid yaml', (t: ExecutionContext) => {
 	const error = t.throws(
 		() => {
 			src({
