@@ -1,5 +1,7 @@
 
 
+# [2.0.0-rc.2](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.1...2.0.0-rc.2) (2023-10-13)
+
 # [2.0.0-rc.1](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.0...2.0.0-rc.1) (2023-10-13)
 
 
