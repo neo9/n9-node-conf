@@ -1,5 +1,12 @@
 
 
+# [2.0.0-rc.1](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.0...2.0.0-rc.1) (2023-10-13)
+
+
+### yarn
+
+* Remove codecov npm dependency ([d11dd6a](https://github.com/neo9/n9-node-conf/commit/d11dd6a3a539c340527704bd2f0b6e30d8b06f4b))
+
 # [2.0.0-rc.0](https://github.com/neo9/n9-node-conf/compare/1.4.1...2.0.0-rc.0) (2023-10-13)
 
 
