@@ -19,6 +19,56 @@ or
 npm install --save @neo9/n9-node-conf
 ```
 
+## V2 Upgrade
+
+- Change extendConfig setting from `string` to `object`.
+  Example :
+
+| Before (V1) | After (V2) |
+
+<table>
+<tr>
+<th>
+Before (V1)
+</th>
+<th>
+After (V2)
+</th>
+</tr>
+<tr>
+<td>
+<pre>
+
+```ts
+{
+	...,
+	extendConfig: {
+		key: 'appName'
+	}
+}
+```
+
+</pre>
+</td>
+<td>
+<pre>
+
+```ts
+{
+	...,
+	extendConfig: {
+		key: {
+			name: 'appName'
+		}
+	}
+}
+```
+
+</pre>
+</td>
+</tr>
+</table>
+
 ## Usage
 
 `n9NodeConf([options])`
@@ -83,9 +133,17 @@ Example : `'./env.json'`
 
 ##### key
 
+###### name
+
 Type: `string`\
 Default the app name from `package.json`.`name`\
 The key to use in configuration extension. The path to load the conf will be `{env}.{app name}`
+
+###### format
+
+Type: `ExtendConfigKeyFormat`\
+Default to undefined.\
+The format to apply to the `packageJSON.name` to find the key name. The path to load the conf will be `{env}.{format}({app name})`
 
 ##### mergeStrategy
 

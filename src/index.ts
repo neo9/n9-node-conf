@@ -18,6 +18,15 @@ export enum N9ConfMergeStrategy {
 	V2 = 'v2',
 }
 
+export enum ExtendConfigKeyFormat {
+	DROMEDARY_CASE = 'dromedary-case',
+	PASCAL_CASE = 'pascal-case',
+	KEBAB_CASE = 'kebab-case',
+	UPPER_KEBAB_CASE = 'upper-kebab-case',
+	SNAKE_CASE = 'snake_case',
+	UPPER_SNAKE_CASE = 'upper_snake_case',
+}
+
 export interface N9ConfOptions {
 	path?: string;
 	extendConfig?: {
@@ -28,7 +37,10 @@ export interface N9ConfOptions {
 			 */
 			relative?: string;
 		};
-		key?: string;
+		key?: {
+			name?: string;
+			format?: ExtendConfigKeyFormat;
+		};
 		mergeStrategy?: N9ConfMergeStrategy;
 	};
 	overridePackageJsonDirPath?: string;
@@ -144,6 +156,28 @@ function loadExtendConfig(
 	}
 }
 
+function getConfigKeyWithFormat(
+	format: ExtendConfigKeyFormat,
+	app: { name: string; version: string },
+): string {
+	switch (format) {
+		case ExtendConfigKeyFormat.DROMEDARY_CASE:
+			return _.chain(app.name).camelCase().lowerFirst().value();
+		case ExtendConfigKeyFormat.PASCAL_CASE:
+			return _.chain(app.name).camelCase().upperFirst().value();
+		case ExtendConfigKeyFormat.KEBAB_CASE:
+			return _.chain(app.name).kebabCase().value();
+		case ExtendConfigKeyFormat.UPPER_KEBAB_CASE:
+			return _.chain(app.name).kebabCase().toUpper().value();
+		case ExtendConfigKeyFormat.SNAKE_CASE:
+			return _.chain(app.name).snakeCase().value();
+		case ExtendConfigKeyFormat.UPPER_SNAKE_CASE:
+			return _.chain(app.name).snakeCase().toUpper().value();
+		default:
+			throw new Error(`unknown-extend-config-key-format-${format}`);
+	}
+}
+
 export default (options: N9ConfOptions = {}): object | any => {
 	const rootDir = appRootDir.get();
 	const confPath: string = process.env.NODE_CONF_PATH || options.path || Path.join(rootDir, 'conf');
@@ -160,7 +194,14 @@ export default (options: N9ConfOptions = {}): object | any => {
 	/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 	const app: { name: string; version: string } = require(packageJsonDirPath);
 
-	const extendConfigKey: string = options.extendConfig?.key ?? app.name;
+	let extendConfigKey: string = app.name;
+	if (options.extendConfig) {
+		if (options.extendConfig.key?.name) extendConfigKey = options.extendConfig.key.name;
+		else if (options.extendConfig.key?.format) {
+			extendConfigKey = getConfigKeyWithFormat(options.extendConfig.key.format, app);
+		}
+	}
+
 	const environments = ['application', `${currentEnvironment}`, 'local']; // Files to load
 	const sources: N9ConfBaseConf[] = []; // Sources of each config file
 	let extendConfig: { metadata: { mergeStrategy: N9ConfMergeStrategy } };

@@ -11,7 +11,7 @@ ava('Simple use case with extendable conf', (t: ExecutionContext) => {
 			path: {
 				absolute: join(__dirname, './fixtures/extend-conf-1/env.json'),
 			},
-			key: 'appName',
+			key: { name: 'appName' },
 		},
 		overridePackageJsonDirPath: join(__dirname, './fixtures/extend-conf-1'),
 	});
