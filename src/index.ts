@@ -1,6 +1,7 @@
+import * as fs from 'node:fs';
+
 import * as appRootDir from 'app-root-dir';
 import * as debug from 'debug';
-import * as fs from 'fs-extra';
 import * as JsYaml from 'js-yaml';
 import * as _ from 'lodash';
 import * as Path from 'path';
@@ -102,7 +103,7 @@ function readConfigFile(path: string, type: 'json' | 'yaml'): any {
 
 	switch (type) {
 		case 'json':
-			return fs.readJSONSync(path);
+			return JSON.parse(fs.readFileSync(path).toString());
 		case 'yaml':
 			return JsYaml.load(fs.readFileSync(path, 'utf8'));
 		default:
@@ -135,7 +136,7 @@ function loadExtendConfig(
 	const dir = Path.dirname(extendConfigPath);
 	const path = Path.join(dir, `${fileNameWithoutExtension}${extension}`);
 
-	if (fs.pathExistsSync(path)) {
+	if (fs.existsSync(path)) {
 		return readConfigFile(path, type);
 	}
 
@@ -204,7 +205,9 @@ export default (options: N9ConfOptions = {}): object | any => {
 
 	const environments = ['application', `${currentEnvironment}`, 'local']; // Files to load
 	const sources: N9ConfBaseConf[] = []; // Sources of each config file
-	let extendConfig: { metadata: { mergeStrategy: N9ConfMergeStrategy } };
+	let extendConfig: Record<'application' | 'local' | string, any> & {
+		metadata: { mergeStrategy: N9ConfMergeStrategy };
+	};
 
 	if (extendConfigPath) {
 		try {
