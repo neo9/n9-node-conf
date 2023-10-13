@@ -1,3 +1,16 @@
+
+
+# [2.0.0-rc.0](https://github.com/neo9/n9-node-conf/compare/1.4.1...2.0.0-rc.0) (2023-10-13)
+
+
+### chore
+
+* Remove fs-extra dependency and upgrade tsconfig cleaning release config #26 ([ffd950d](https://github.com/neo9/n9-node-conf/commit/ffd950de56e5cedaef0e0f3448eeabb77398f148)), closes [#26](https://github.com/neo9/n9-node-conf/issues/26)
+
+### extend
+
+* Add extend config key format #25 ([4cdf21c](https://github.com/neo9/n9-node-conf/commit/4cdf21c250f70d59d1d9e4b9815cd51542d04420)), closes [#25](https://github.com/neo9/n9-node-conf/issues/25)
+
 ## [1.4.1](https://github.com/neo9/n9-node-conf/compare/1.4.0...1.4.1) (2022-03-21)
 
 
@@ -62,4 +75,3 @@
 ### release
 
 * Fix changelog generation ([5a84ed2](https://github.com/neo9/n9-node-conf/commit/5a84ed223138a2070ef01d739d5b54c4707641a8))
-
