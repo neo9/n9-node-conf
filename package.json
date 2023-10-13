@@ -12,7 +12,7 @@
     "yaml",
     "json"
   ],
-  "license": "GNU",
+  "license": "GPL-3.0-or-later",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,7 +29,6 @@
     "test:dev": "export NODE_ENV=test && TS_NODE_FILES=true ava --no-worker-threads --verbose --color --serial --watch",
     "test": "export NODE_ENV=test && TS_NODE_FILES=true nyc ava --no-worker-threads --verbose --color --serial && nyc report --reporter=html",
     "test:one": "export NODE_ENV=test && TS_NODE_FILES=true ava --no-worker-threads --verbose --color --serial",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov -f coverage.lcov",
     "release": "release-it",
     "release:pre-release": "release-it --preRelease",
     "release:dry": "release-it --dry-run"
@@ -60,14 +59,11 @@
     "@tsconfig/node16": "^16.1.1",
     "@types/app-root-dir": "^0.1.0",
     "@types/debug": "^4.1.8",
-    "@types/fs-extra": "^11.0.1",
     "@types/js-yaml": "^4.0.1",
     "@types/lodash": "^4.14.169",
     "@types/node": "^20.5.9",
     "ava": "^5.3.1",
-    "codecov": "^3.8.3",
-    "conventional-changelog-cli": "4.1.0",
-    "husky": "4.3.8",
+    "husky": "^4.3.8",
     "nyc": "^15.1.0",
     "prettier": "^3.0.3",
     "release-it": "^16.1.5",
