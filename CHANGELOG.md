@@ -1,5 +1,20 @@
 
 
+# [2.0.0-rc.3](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.2...2.0.0-rc.3) (2023-10-27)
+
+
+### doc
+
+* Fix readme file ([11d418c](https://github.com/neo9/n9-node-conf/commit/11d418c5d40ced4daac5834728c33650dc0d16c7))
+
+### extend
+
+* Add extend config key prefix to avoid #27 ([1aa33fa](https://github.com/neo9/n9-node-conf/commit/1aa33faa4b6fbf2e5764dfdb882bb8cf855afe90)), closes [#27](https://github.com/neo9/n9-node-conf/issues/27)
+
+### yarn
+
+* Upgrade dependencies and drop node 16 support ([d302cf8](https://github.com/neo9/n9-node-conf/commit/d302cf89500704a1f445946fa3820943ba25bbfe))
+
 # [2.0.0-rc.2](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.1...2.0.0-rc.2) (2023-10-13)
 
 # [2.0.0-rc.1](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.0...2.0.0-rc.1) (2023-10-13)
