@@ -21,6 +21,7 @@ npm install --save @neo9/n9-node-conf
 
 ## V2 Upgrade
 
+- Drop Node.js V 16 support as it has reached end of life
 - Change extendConfig setting from `string` to `object`.
   Example :
 

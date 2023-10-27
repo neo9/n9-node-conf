@@ -29,7 +29,7 @@ export default conf;
 
 to override it for user a, create a file `env.json` or `env.yaml` :
 
-env.json : (remove comments)
+`env.json` : (remove comments)
 
 ```json5
 {
@@ -43,7 +43,7 @@ env.json : (remove comments)
 }
 ```
 
-env.yaml :
+`env.yaml` :
 
 ```yaml
 application: # choose which environment you want to override, you can overide all with one file

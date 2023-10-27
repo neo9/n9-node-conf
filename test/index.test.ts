@@ -1,11 +1,11 @@
-import * as appRootDir from 'app-root-dir';
+import * as AppRootDir from 'app-root-dir';
 import test from 'ava';
 import { join } from 'path';
 
 import src from '../src';
 
 /* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
-const app = require(join(appRootDir.get(), 'package.json'));
+const app = require(join(AppRootDir.get(), 'package.json'));
 
 test('Simple use case', (t) => {
 	delete process.env.NODE_ENV;

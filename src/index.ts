@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import * as appRootDir from 'app-root-dir';
+import * as AppRootDir from 'app-root-dir';
 import * as debug from 'debug';
 import * as JsYaml from 'js-yaml';
 import * as _ from 'lodash';
@@ -180,7 +180,7 @@ function getConfigKeyWithFormat(
 }
 
 export default (options: N9ConfOptions = {}): object | any => {
-	const rootDir = appRootDir.get();
+	const rootDir = AppRootDir.get();
 	const confPath: string = process.env.NODE_CONF_PATH || options.path || Path.join(rootDir, 'conf');
 	const packageJsonDirPath = Path.join(
 		options.overridePackageJsonDirPath || rootDir,
