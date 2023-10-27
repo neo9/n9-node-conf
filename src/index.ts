@@ -41,6 +41,7 @@ export interface N9ConfOptions {
 		key?: {
 			name?: string;
 			format?: ExtendConfigKeyFormat;
+			prefixToAvoid?: string;
 		};
 		mergeStrategy?: N9ConfMergeStrategy;
 	};
@@ -115,7 +116,9 @@ function loadExtendConfig(
 	extendConfigPath: string,
 	extension: string = Path.extname(extendConfigPath),
 	deep: number = 3,
-): { metadata: { mergeStrategy: N9ConfMergeStrategy } } {
+):
+	| { fileContent: { metadata: { mergeStrategy: N9ConfMergeStrategy } }; filePath: string }
+	| undefined {
 	let type: 'json' | 'yaml';
 
 	switch (extension) {
@@ -137,7 +140,10 @@ function loadExtendConfig(
 	const path = Path.join(dir, `${fileNameWithoutExtension}${extension}`);
 
 	if (fs.existsSync(path)) {
-		return readConfigFile(path, type);
+		return {
+			fileContent: readConfigFile(path, type),
+			filePath: path,
+		};
 	}
 
 	if (deep > 0) {
@@ -157,26 +163,56 @@ function loadExtendConfig(
 	}
 }
 
-function getConfigKeyWithFormat(
-	format: ExtendConfigKeyFormat,
-	app: { name: string; version: string },
-): string {
+function getConfigKeyWithFormat(format: ExtendConfigKeyFormat, appName: string): string {
 	switch (format) {
 		case ExtendConfigKeyFormat.DROMEDARY_CASE:
-			return _.chain(app.name).camelCase().lowerFirst().value();
+			return _.chain(appName).camelCase().lowerFirst().value();
 		case ExtendConfigKeyFormat.PASCAL_CASE:
-			return _.chain(app.name).camelCase().upperFirst().value();
+			return _.chain(appName).camelCase().upperFirst().value();
 		case ExtendConfigKeyFormat.KEBAB_CASE:
-			return _.chain(app.name).kebabCase().value();
+			return _.chain(appName).kebabCase().value();
 		case ExtendConfigKeyFormat.UPPER_KEBAB_CASE:
-			return _.chain(app.name).kebabCase().toUpper().value();
+			return _.chain(appName).kebabCase().toUpper().value();
 		case ExtendConfigKeyFormat.SNAKE_CASE:
-			return _.chain(app.name).snakeCase().value();
+			return _.chain(appName).snakeCase().value();
 		case ExtendConfigKeyFormat.UPPER_SNAKE_CASE:
-			return _.chain(app.name).snakeCase().toUpper().value();
+			return _.chain(appName).snakeCase().toUpper().value();
 		default:
 			throw new Error(`unknown-extend-config-key-format-${format}`);
 	}
+}
+
+function removePrefixFromString(prefixToAvoid: string, value: string): string {
+	if (value.startsWith(prefixToAvoid)) {
+		return value.slice(prefixToAvoid.length);
+	}
+	return value;
+}
+
+function getExtendCongigKey(appName: string, options: N9ConfOptions): string {
+	let extendConfigKey: string = appName;
+	if (options.extendConfig) {
+		if (options.extendConfig.key?.name) {
+			if (options.extendConfig.key?.prefixToAvoid) {
+				log(`Setting extendConfig.key.prefixToAvoid not used.`);
+			}
+			extendConfigKey = options.extendConfig.key.name;
+		} else if (options.extendConfig.key?.format) {
+			if (options.extendConfig.key.prefixToAvoid) {
+				const appNameWithoutPrefix = removePrefixFromString(
+					options.extendConfig.key.prefixToAvoid,
+					appName,
+				);
+				extendConfigKey = getConfigKeyWithFormat(
+					options.extendConfig.key.format,
+					appNameWithoutPrefix,
+				);
+			} else {
+				extendConfigKey = getConfigKeyWithFormat(options.extendConfig.key.format, appName);
+			}
+		}
+	}
+	return extendConfigKey;
 }
 
 export default (options: N9ConfOptions = {}): object | any => {
@@ -194,29 +230,27 @@ export default (options: N9ConfOptions = {}): object | any => {
 	// Fetch package.json of the app
 	/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 	const app: { name: string; version: string } = require(packageJsonDirPath);
-
-	let extendConfigKey: string = app.name;
-	if (options.extendConfig) {
-		if (options.extendConfig.key?.name) extendConfigKey = options.extendConfig.key.name;
-		else if (options.extendConfig.key?.format) {
-			extendConfigKey = getConfigKeyWithFormat(options.extendConfig.key.format, app);
-		}
-	}
+	const extendConfigKey = getExtendCongigKey(app.name, options);
 
 	const environments = ['application', `${currentEnvironment}`, 'local']; // Files to load
 	const sources: N9ConfBaseConf[] = []; // Sources of each config file
 	let extendConfig: Record<'application' | 'local' | string, any> & {
 		metadata: { mergeStrategy: N9ConfMergeStrategy };
 	};
+	let extendConfigFileLoadedPath: string;
 
 	if (extendConfigPath) {
 		try {
-			extendConfig = loadExtendConfig(extendConfigPath);
+			const loadExtendConfigResult = loadExtendConfig(extendConfigPath);
+			if (loadExtendConfigResult) {
+				extendConfig = loadExtendConfigResult.fileContent;
+				extendConfigFileLoadedPath = loadExtendConfigResult.filePath;
+			}
 		} catch (err) {
 			throw new Error(
 				`Error while loading extendable config (${
 					err.message
-				}) : ${extendConfigPath} ${JSON.stringify(err)}`,
+				}) : ${extendConfigPath} ${JSON.stringify(err)} ${err.stack}`,
 			);
 		}
 	}
@@ -237,7 +271,7 @@ export default (options: N9ConfOptions = {}): object | any => {
 					log(`Error while loading config file '${filePath}' : ${JSON.stringify(err)}`);
 				}
 			} catch (e) {
-				log(`Can't stringify error ${err && err.message}`);
+				log(`Can't stringify error ${err?.message}`);
 			}
 		}
 
@@ -254,7 +288,13 @@ export default (options: N9ConfOptions = {}): object | any => {
 		}
 
 		// Load its source
-		log(`Loading ${environment} configuration`);
+		log(
+			`Loading ${environment} configuration${
+				extendConfig
+					? `extended with file ${extendConfigFileLoadedPath} key ${environment}.${extendConfigKey}`
+					: ''
+			}`,
+		);
 
 		/* eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-var-requires, global-require */
 		const loadedSource = require(filePath);
