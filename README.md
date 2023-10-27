@@ -25,8 +25,6 @@ npm install --save @neo9/n9-node-conf
 - Change extendConfig setting from `string` to `object`.
   Example :
 
-| Before (V1) | After (V2) |
-
 <table>
 <tr>
 <th>
