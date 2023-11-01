@@ -278,13 +278,16 @@ export default (options: N9ConfOptions = {}): object | any => {
 		// If config file does not exists
 		if (fileLoadingError) {
 			// Ignore for local.js file
-			if (environment === 'local') break;
-			// throw an error for others
-			throw new Error(
-				`Could not load config file: ${filePath}, ${fileLoadingError.name}(${
-					fileLoadingError.message
-				}) details: ${JSON.stringify(fileLoadingError)}`,
-			);
+			if (environment === 'application') {
+				// throw an error only for default application configuration file
+				throw new Error(
+					`Could not load config file: ${filePath}, ${fileLoadingError.name}(${
+						fileLoadingError.message
+					}) details: ${JSON.stringify(fileLoadingError)}`,
+				);
+			} else {
+				log(`Missing configuration file ${environment}`);
+			}
 		}
 
 		// Load its source
