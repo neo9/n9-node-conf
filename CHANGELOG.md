@@ -1,5 +1,12 @@
 
 
+# [2.0.0](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.3...2.0.0) (2023-11-14)
+
+
+### yarn
+
+* Upgrade dependencies ([b4869e6](https://github.com/neo9/n9-node-conf/commit/b4869e68a57fbdb5d2a5de972ccd3cae6556479b))
+
 # [2.0.0-rc.3](https://github.com/neo9/n9-node-conf/compare/2.0.0-rc.2...2.0.0-rc.3) (2023-10-27)
 
 
